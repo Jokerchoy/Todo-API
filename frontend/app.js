@@ -6,7 +6,6 @@ let currentUser = null;
 
 // 页面加载完成
 document.addEventListener("DOMContentLoaded", () => {
-    // 检查本地存储是否有 token
     const savedToken = localStorage.getItem("todo_token");
     const savedUser = localStorage.getItem("todo_user");
 
@@ -106,7 +105,6 @@ async function login() {
             currentToken = data.access_token;
             currentUser = { username };
 
-            // 保存到本地存储
             localStorage.setItem("todo_token", currentToken);
             localStorage.setItem("todo_user", JSON.stringify(currentUser));
 
@@ -128,7 +126,6 @@ function logout() {
     localStorage.removeItem("todo_user");
     showAuth();
 
-    // 清空表单
     document.getElementById("login-username").value = "";
     document.getElementById("login-password").value = "";
     document.getElementById("reg-username").value = "";
@@ -171,10 +168,8 @@ async function createTodo() {
         });
 
         if (response.ok) {
-            // 清空表单
             document.getElementById("todo-title").value = "";
             document.getElementById("todo-desc").value = "";
-            // 重新加载列表
             loadTodos();
         } else {
             const error = await response.json();
@@ -190,7 +185,6 @@ async function loadTodos() {
     try {
         let url = `${API_BASE}/todos/`;
 
-        // 根据筛选条件添加参数
         if (currentFilter === "active") {
             url += "?completed=false";
         } else if (currentFilter === "completed") {
@@ -204,11 +198,9 @@ async function loadTodos() {
         if (response.ok) {
             const todos = await response.json();
             renderTodos(todos);
-        } else {
-            console.error("加载失败");
         }
     } catch (error) {
-        console.error("网络错误:", error);
+        console.error("加载失败:", error);
     }
 }
 
@@ -232,7 +224,7 @@ function renderTodos(todos) {
                 <input type="checkbox"
                        class="todo-checkbox"
                        ${todo.completed ? 'checked' : ''}
-                       onchange="toggleComplete(${todo.id}, this.checked)">
+                       onchange="window.toggleComplete(${todo.id}, this.checked)">
                 <span class="todo-title">${escapeHtml(todo.title)}</span>
                 <span class="priority-badge priority-${todo.priority}">
                     ${todo.priority === 1 ? '🟢 低' : todo.priority === 2 ? '🟡 中' : '🔴 高'}
@@ -241,9 +233,7 @@ function renderTodos(todos) {
             ${todo.description ? `<div class="todo-description">📝 ${escapeHtml(todo.description)}</div>` : ''}
             <div class="todo-footer">
                 <span>📅 ${formatDate(todo.created_at)}</span>
-                <div class="todo-actions">
-                    <button class="delete-btn" onclick="deleteTodo(${todo.id})">删除</button>
-                </div>
+                <button class="delete-btn" onclick="window.deleteTodo(${todo.id})">删除</button>
             </div>
         </div>
     `).join('');
@@ -289,48 +279,47 @@ async function deleteTodo(id) {
 function filterTodos(filter) {
     currentFilter = filter;
 
-    // 更新按钮样式
-    document.querySelectorAll(".filter-btn").forEach(btn => {
-        btn.classList.remove("active");
-    });
+    const btns = document.querySelectorAll(".filter-btn");
+    btns.forEach(btn => btn.classList.remove("active"));
 
-    if (filter === "all") {
-        document.querySelectorAll(".filter-btn")[0].classList.add("active");
-    } else if (filter === "active") {
-        document.querySelectorAll(".filter-btn")[1].classList.add("active");
-    } else {
-        document.querySelectorAll(".filter-btn")[2].classList.add("active");
-    }
+    if (filter === "all") btns[0].classList.add("active");
+    else if (filter === "active") btns[1].classList.add("active");
+    else if (filter === "completed") btns[2].classList.add("active");
 
     loadTodos();
 }
 
-// 辅助函数：转义 HTML
+// 辅助函数
 function escapeHtml(text) {
     const div = document.createElement("div");
     div.textContent = text;
     return div.innerHTML;
 }
 
-// 辅助函数：格式化日期
 function formatDate(dateString) {
     const date = new Date(dateString);
     const now = new Date();
     const diff = now - date;
 
-    date.setHours(date.getHours() + 8);//时区+8小时
-    // 今天
     if (diff < 24 * 3600 * 1000 && date.getDate() === now.getDate()) {
         return `今天 ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
     }
 
-    // 昨天
     const yesterday = new Date(now);
     yesterday.setDate(now.getDate() - 1);
     if (date.getDate() === yesterday.getDate()) {
         return `昨天 ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
     }
 
-    // 其他
     return `${date.getMonth()+1}/${date.getDate()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
 }
+
+// 确保所有函数都在全局作用域
+window.switchTab = switchTab;
+window.login = login;
+window.register = register;
+window.logout = logout;
+window.createTodo = createTodo;
+window.filterTodos = filterTodos;
+window.toggleComplete = toggleComplete;
+window.deleteTodo = deleteTodo;

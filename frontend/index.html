@@ -8,45 +8,38 @@
 </head>
 <body>
     <div class="container">
-        <!-- 头部 -->
         <header>
             <h1>📝 待办事项管理系统</h1>
             <p class="subtitle">高效管理你的每一天</p>
-            <p class="subtitle">完成了别忘了来打勾哦</p>
         </header>
 
-        <!-- 登录/注册区域（未登录时显示） -->
+        <!-- 登录/注册区域 -->
         <div id="auth-section" class="auth-section">
             <div class="auth-tabs">
-                <button class="tab-btn active" onclick="switchTab('login')">登录</button>
-                <button class="tab-btn" onclick="switchTab('register')">注册</button>
+                <button class="tab-btn active" onclick="window.switchTab('login')">登录</button>
+                <button class="tab-btn" onclick="window.switchTab('register')">注册</button>
             </div>
 
-            <!-- 登录表单 -->
             <div id="login-form" class="auth-form active">
                 <input type="text" id="login-username" placeholder="用户名" class="auth-input">
                 <input type="password" id="login-password" placeholder="密码" class="auth-input">
-                <button onclick="login()" class="btn btn-primary">登录</button>
+                <button onclick="window.login()" class="btn btn-primary">登录</button>
             </div>
 
-            <!-- 注册表单 -->
             <div id="register-form" class="auth-form">
                 <input type="text" id="reg-username" placeholder="用户名 (3-50字符)" class="auth-input">
                 <input type="email" id="reg-email" placeholder="邮箱" class="auth-input">
                 <input type="password" id="reg-password" placeholder="密码 (至少6位)" class="auth-input">
-                <button onclick="register()" class="btn btn-primary">注册</button>
+                <button onclick="window.register()" class="btn btn-primary">注册</button>
             </div>
         </div>
 
-        <!-- 主应用区域（登录后显示） -->
         <div id="app-section" class="app-section" style="display: none;">
-            <!-- 用户信息栏 -->
             <div class="user-bar">
                 <span>👤 <span id="username-display"></span></span>
-                <button onclick="logout()" class="btn btn-logout">退出登录</button>
+                <button onclick="window.logout()" class="btn btn-logout">退出登录</button>
             </div>
 
-            <!-- 创建待办表单 -->
             <div class="create-todo">
                 <h3>➕ 添加新任务</h3>
                 <div class="todo-form">
@@ -57,23 +50,20 @@
                         <option value="2" selected>🟡 中优先级</option>
                         <option value="3">🔴 高优先级</option>
                     </select>
-                    <button onclick="createTodo()" class="btn btn-success">创建任务</button>
+                    <button onclick="window.createTodo()" class="btn btn-success">创建任务</button>
                 </div>
             </div>
 
-            <!-- 筛选栏 -->
             <div class="filter-bar">
                 <h3>📋 我的任务</h3>
                 <div class="filters">
-                    <button class="filter-btn active" onclick="filterTodos('all')">全部</button>
-                    <button class="filter-btn" onclick="filterTodos('active')">未完成</button>
-                    <button class="filter-btn" onclick="filterTodos('completed')">已完成</button>
+                    <button class="filter-btn active" onclick="window.filterTodos('all')">全部</button>
+                    <button class="filter-btn" onclick="window.filterTodos('active')">未完成</button>
+                    <button class="filter-btn" onclick="window.filterTodos('completed')">已完成</button>
                 </div>
             </div>
 
-            <!-- 待办列表 -->
             <div id="todo-list" class="todo-list">
-                <!-- 动态加载待办事项 -->
                 <div class="loading">加载中...</div>
             </div>
         </div>
