@@ -1,30 +1,30 @@
-# 使用 Python 3.12 官方镜像作为基础
-FROM python:3.12-slim
+# 使用 Alpine Linux 版本
+FROM python:3.12-alpine
 
-# 设置工作目录
 WORKDIR /app
 
-# 设置环境变量
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     TZ=Asia/Shanghai
 
-# 安装系统依赖
-RUN apt-get update && apt-get install -y --no-install-recommends \
+# 安装编译依赖
+RUN apk add --no-cache \
     gcc \
-    && rm -rf /var/lib/apt/lists/*
+    musl-dev \
+    linux-headers \
+    curl \
+    libffi-dev \
+    openssl-dev
 
-# 复制依赖文件
 COPY requirements.txt .
 
-# 安装 Python 依赖
-RUN pip install --no-cache-dir -r requirements.txt
+# 使用阿里云 pip 源（更稳定）
+RUN pip install --no-cache-dir -r requirements.txt \
+    -i https://mirrors.aliyun.com/pypi/simple/ \
+    --trusted-host mirrors.aliyun.com
 
-# 复制项目所有文件
 COPY . .
 
-# 暴露端口
 EXPOSE 8000
 
-# 启动命令
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]

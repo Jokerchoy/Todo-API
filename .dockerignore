@@ -1,0 +1,36 @@
+# 虚拟环境
+.venv/
+venv/
+env/
+
+# Python 缓存
+__pycache__/
+*.pyc
+*.pyo
+
+# Git
+.git/
+.gitignore
+
+# 数据库文件（生产环境建议用外部卷）
+*.db
+*.sqlite
+
+# IDE
+.vscode/
+.idea/
+
+# 日志
+*.log
+
+# 环境变量
+.env
+
+# Docker 相关
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# 测试
+tests/
+pytest_cache/
