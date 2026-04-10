@@ -1,8 +1,12 @@
-# Todo API - 待办事项管理系统
+# 📝 Todo API - 待办事项管理系统
 
-一个基于 FastAPI 构建的现代化 RESTful API 待办事项管理系统，支持用户认证、JWT Token、完整的 CRUD 操作。
+一个基于 FastAPI 构建的现代化 RESTful API 待办事项管理系统，支持用户认证、JWT Token、完整的 CRUD 操作，配有响应式前端界面。
+
+---
 
 ## ※功能特性
+
+### ※后端功能
 
 - **用户认证系统**
   - 用户注册、登录
@@ -24,12 +28,22 @@
   - 优先级筛选
   - 按创建时间排序
 
-- **数据安全**
-  - 用户数据隔离（只能访问自己的待办）
-  - 密码哈希存储
-  - JWT 安全认证
+### ※前端功能
+
+- 响应式 Web 界面
+- 用户注册/登录
+- 待办事项创建、编辑、删除
+- 标记完成/未完成
+- 优先级标签显示（🟢低 / 🟡中 / 🔴高）
+- 筛选功能（全部 / 未完成 / 已完成）
+- Token 本地存储自动登录
+- 移动端适配
+
+---
 
 ## ※技术栈
+
+### 后端
 
 | 技术 | 版本 | 用途 |
 |------|------|------|
@@ -43,14 +57,27 @@
 | bcrypt | 4.0.1 | 哈希算法 |
 | Uvicorn | 0.24.0 | ASGI 服务器 |
 
+### 前端
+
+| 技术 | 用途 |
+|------|------|
+| HTML5 | 页面结构 |
+| CSS3 | 样式设计（渐变、动画、响应式） |
+| JavaScript | 交互逻辑、API 调用 |
+
+---
+
 ## ※安装与运行
 
-### 1. 克隆项目
+### 方式一：本地运行
+
+#### 1. 克隆项目
+
 ```bash
-git clone https://github.com/yourusername/todo-api.git
-cd todo-api
+git clone https://github.com/Jokerchoy/Todo-API.git
+cd Todo-API
 ```
-### 2. 创建虚拟环境
+### 2. 创建虚拟环境(使用pycharm可跳过)
 ```bash
 # Windows
 python -m venv .venv
@@ -123,7 +150,7 @@ todo = requests.post(f"{BASE_URL}/todos/",
 print(todo.json())
 ```
 ## ※项目结构
-todo-api/
+Todo-API/
 
 ├── app.py              # 应用入口
 
@@ -137,9 +164,17 @@ todo-api/
 
 ├── requirements.txt    # 依赖列表
 
-├── .env               # 环境变量
+├── Dockerfile          # Docker 配置
 
-├── todos.db           # SQLite 数据库（自动生成）
+├── .dockerignore       # Docker 忽略文件
+
+├── frontend/           # 前端界面
+
+│   ├── index.html      # 主页面
+
+│   ├── style.css       # 样式文件
+
+│   └── app.js          # JavaScript 逻辑
 
 └── README.md          # 项目文档
 
